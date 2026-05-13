@@ -1,4 +1,5 @@
-import os
+from pathlib import Path
+
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score
@@ -8,12 +9,14 @@ from sklearn.svm import SVC
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import FunctionTransformer, LabelEncoder
 
-DATA_DIR = "data"
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT_DIR / "data"
+SUBMISSIONS_DIR = ROOT_DIR / "submissions"
 
 if __name__ == "__main__":
 	# 读取清洗后的数据集
-	train_df = pd.read_json(os.path.join(DATA_DIR, 'train_cleaned.json'), orient='records')
-	test_df = pd.read_json(os.path.join(DATA_DIR, 'test_cleaned.json'), orient='records')
+	train_df = pd.read_json(DATA_DIR / 'train_cleaned.json', orient='records')
+	test_df = pd.read_json(DATA_DIR / 'test_cleaned.json', orient='records')
 
 	vectorizer = make_pipeline(
 		# 使用 TF-IDF 将清洗后的文本转换为数值向量
@@ -70,7 +73,8 @@ if __name__ == "__main__":
 	# 对测试集进行预测
 	y_pred = label_encoder.inverse_transform(classifier.predict(x_test))
 	test_df['cuisine'] = y_pred
-	test_df[['id', 'cuisine']].to_csv('submissions/submission.csv', index=False)
+	SUBMISSIONS_DIR.mkdir(parents=True, exist_ok=True)
+	test_df[['id', 'cuisine']].to_csv(SUBMISSIONS_DIR / 'submission.csv', index=False)
 	print("预测结果已输出到 submissions/submission.csv")
 
 	# # 网格搜索最优参数

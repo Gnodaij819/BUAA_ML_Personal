@@ -1,11 +1,13 @@
-import os
 import re
 import unicodedata
+from pathlib import Path
+
 import pandas as pd
 from nltk.stem import WordNetLemmatizer
 
 lemma = WordNetLemmatizer()
-DATA_DIR = "data"
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT_DIR / "data"
 
 def preprocess_ingredients(ingredient_list):
     # 把配料表拼接为字符串
@@ -41,11 +43,10 @@ def preprocess_ingredients(ingredient_list):
     return ' '.join(words)
 
 if __name__ == "__main__":
-    if not os.path.exists(DATA_DIR):
-        os.makedirs(DATA_DIR)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    train_df = pd.read_json(os.path.join(DATA_DIR, 'train.json'))
-    test_df = pd.read_json(os.path.join(DATA_DIR, 'test.json'))
+    train_df = pd.read_json(DATA_DIR / 'train.json')
+    test_df = pd.read_json(DATA_DIR / 'test.json')
 
     print(f"原始训练集大小: {len(train_df)}")
 
@@ -59,8 +60,8 @@ if __name__ == "__main__":
     train_df['ingredients_clean'] = train_df['ingredients'].apply(preprocess_ingredients)
     test_df['ingredients_clean'] = test_df['ingredients'].apply(preprocess_ingredients)
 
-    train_output_path = os.path.join(DATA_DIR, 'train_cleaned.json')
-    test_output_path = os.path.join(DATA_DIR, 'test_cleaned.json')
+    train_output_path = DATA_DIR / 'train_cleaned.json'
+    test_output_path = DATA_DIR / 'test_cleaned.json'
 
     train_df.to_json(train_output_path, orient='records', force_ascii=False, indent=2)
     print(f"训练集数据处理完毕，已保存至 {train_output_path}。")

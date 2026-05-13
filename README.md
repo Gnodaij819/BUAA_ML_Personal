@@ -10,6 +10,13 @@
 
 ```text
 ML_Personal/
+├── src/
+│   ├── clean_data.py               # 数据清洗与预处理
+│   ├── eda_data.py                 # 探索性数据分析
+│   ├── model.py                    # TF-IDF + SVM/One-vs-Rest 训练与预测
+│   ├── wild_deep.py                # Wide & Deep + Ensemble 实验脚本
+│   ├── cuisine-prediction.ipynb    # 主要实验笔记本
+│   └── try.ipynb                   # 额外实验笔记本
 ├── data/
 │   ├── train.json              # 原始训练数据
 │   ├── test.json               # 原始测试数据
@@ -20,12 +27,6 @@ ML_Personal/
 │   ├── submission2.csv
 │   ├── ...
 │   └── submission_TEST.csv     # 历史提交结果
-├── clean_data.py               # 数据清洗与预处理
-├── eda_data.py                 # 探索性数据分析
-├── model.py                    # TF-IDF + SVM/One-vs-Rest 训练与预测
-├── wild_deep.py                # Wide & Deep + Ensemble 实验脚本
-├── cuisine-prediction.ipynb    # 主要实验笔记本
-├── try.ipynb                   # 额外实验笔记本
 ├── best_cuisine_model.h5       # 已训练模型权重
 ├── requirements.txt            # Python 依赖列表
 └── README.md
@@ -80,23 +81,23 @@ python -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4')"
 2. 运行数据清洗：
 
 ```bash
-python clean_data.py
+python src/clean_data.py
 ```
 
 3. 如需查看数据分布，运行：
 
 ```bash
-python eda_data.py
+python src/eda_data.py
 ```
 
 4. 训练传统机器学习模型并生成提交文件：
 
 ```bash
-python model.py
+python src/model.py
 ```
 
 5. 如需尝试深度学习与集成方案，运行：
 
 ```bash
-python wild_deep.py
+python src/wild_deep.py
 ```

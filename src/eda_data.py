@@ -1,10 +1,12 @@
-import os
+from pathlib import Path
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter
 
-DATA_DIR = "data"
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT_DIR / "data"
 
 sns.set_theme(style="whitegrid")
 plt.rcParams['font.sans-serif'] = ['SimHei']
@@ -12,7 +14,7 @@ plt.rcParams['axes.unicode_minus'] = False
 pd.set_option('display.max_colwidth', None)
 
 if __name__ == "__main__":
-    df = pd.read_json(os.path.join(DATA_DIR, 'train.json'))
+    df = pd.read_json(DATA_DIR / 'train.json')
 
     # 菜系食谱数量分布
     cuisine_counts = df['cuisine'].value_counts()

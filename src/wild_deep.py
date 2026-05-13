@@ -3,6 +3,7 @@ import numpy as np
 import re
 import os
 import sys
+from pathlib import Path
 import tensorflow as tf
 from tensorflow.keras import layers, Model, Input, callbacks, regularizers
 from tensorflow.keras.preprocessing.text import Tokenizer
@@ -26,6 +27,9 @@ if conda_prefix:
 # ==========================================
 # 1. 配置与初始化
 # ==========================================
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT_DIR / 'data'
+SUBMISSIONS_DIR = ROOT_DIR / 'submissions'
 SEED = 42
 np.random.seed(SEED)
 tf.random.set_seed(SEED)
@@ -34,8 +38,8 @@ tf.random.set_seed(SEED)
 # 2. 数据加载与高级清洗
 # ==========================================
 print("\n[Step 1] Loading Data & Cleaning...")
-train_df = pd.read_json('data/train.json')
-test_df = pd.read_json('data/test.json')
+train_df = pd.read_json(DATA_DIR / 'train.json')
+test_df = pd.read_json(DATA_DIR / 'test.json')
 
 # 使用你之前那套高级清洗逻辑 (这里简化展示，请保留你的 final_clean_pipeline)
 # 假设你已经运行过清洗逻辑，或者这里用简单的代替（建议用你那个高级版的）
@@ -184,7 +188,8 @@ y_pred_text = label_encoder.inverse_transform(y_pred_indices)
 
 # 生成提交
 submission = pd.DataFrame({'id': test_df['id'], 'cuisine': y_pred_text})
-filename = 'submission_final_ensemble.csv'
+SUBMISSIONS_DIR.mkdir(parents=True, exist_ok=True)
+filename = SUBMISSIONS_DIR / 'submission_final_ensemble.csv'
 submission.to_csv(filename, index=False)
 
 print(f"\n🏆 最终融合完成！结果已保存: {filename}")
