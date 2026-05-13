@@ -36,7 +36,3 @@ dist/
 *.h5
 *.keras
 *.ckpt
-
-# Generated data
-data/train_cleaned.json
-data/test_cleaned.json
